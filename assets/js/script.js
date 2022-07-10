@@ -9,6 +9,8 @@ var choice = document.getElementById("choices");
 let storedArray = JSON.parse(window.localStorage.getItem("highScores"));
 let viewScoresBtn = document.getElementById("view-scores")
 let scoresDiv = document.getElementById("scores-div");
+let results = document.getElementById("results");
+var choice = document.getElementById("choices");
 var quizCount = 0;
 let score = 0;
 
@@ -77,14 +79,17 @@ function setTime() {
       scoresArray.push(userAndScore);
       saveScores(scoresArray);
       goBackBtn();
-      // need to add in a way to clear the scores array
-      // need to add in a way to display all scores
+      clearScoresBtn();
+      displayAllScores();
       viewScoresBtn.remove();
     });
     results.append(initialsInput);
     results.append(postScoreBtn);
   }
 
+  const saveScores = (array) => {
+    window.localStorage.setItem("highScores", JSON.stringify(array));
+  }
 
 
   const defineScoresArray = (arr1, arr2) => {
@@ -95,9 +100,57 @@ function setTime() {
     }
   }
 
+  function goBackBtn() {
+    let backBtn = document.createElement("input");
+    backBtn.setAttribute("type", "button");
+    backBtn.setAttribute("value", "Go Back");
+    backBtn.addEventListener("click", function(event){
+      event.preventDefault();
+      window.location.reload();
+    })
+    buttonsDiv.append(backBtn)
+  }
+
+// removes all child elements
   const removeEls = (...els) => {
     for (let el of els) el.remove();
   }
+
+  function displayAllScores() {
+    removeEls(timer, startButton, results);
+    let scoresArray = defineScoresArray(storedArray, emptyArray);
+    scoresArray.forEach(obj => {
+      let initials = obj.initials;
+      let storedScore = obj.score;
+      let resultsP = document.createElement("p");
+      resultsP.innerText = `${initials}: ${storedScore}`;
+      scoresDiv.append(resultsP);
+    });
+  }
+
+  function viewScores() {
+    viewScoresBtn.addEventListener("click", function(event) {
+      event.preventDefault();
+      removeEls(timer, startButton);
+      displayAllScores();
+      removeEls(viewScoresBtn);
+      clearScoresBtn();
+      goBackBtn();
+    });
+  }
+
+  function clearScoresBtn() {    
+    let clearBtn = document.createElement("input");
+    clearBtn.setAttribute("type", "button");
+    clearBtn.setAttribute("value", "Clear Scores");
+    clearBtn.addEventListener("click", function(event){
+      event.preventDefault();
+      removeEls(scoresDiv);
+      window.localStorage.removeItem("highScores");
+    })
+    scoresDiv.append(clearBtn)
+  }
+
 
   var quiz = [
     {
