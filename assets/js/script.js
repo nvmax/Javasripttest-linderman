@@ -1,6 +1,13 @@
 let secondsLeft = 60;
-
-
+let emptyArray = [];
+let buttonsDiv = document.getElementById("buttons")
+let timer = document.getElementById("timer");
+let startButton = document.getElementById("start-button");
+startButton.addEventListener("click", setTime);
+var questionDiv = document.getElementById("question-div");
+var choice = document.getElementById("choices");
+var quizCount = 0;
+let score = 0;
 
 
 function setTime() {
@@ -47,6 +54,18 @@ function setTime() {
     }
   }
 
+  const defineScoresArray = (arr1, arr2) => {
+    if(arr1 !== null) {
+      return arr1
+    } else {
+      return arr2
+    }
+  }
+
+  const removeEls = (...els) => {
+    for (let el of els) el.remove();
+  }
+
   var quiz = [
     {
       title: "What language specifies the style of elements on a webpage?",
@@ -62,7 +81,7 @@ function setTime() {
   
     {
       title: "How can you make a numbered List",
-      multiChoice: [ "<li>", "<ol>", "<ul>", "<dl>", "<li>"],
+      multiChoice: [ "<li>", "<ol>", "<ul>", "<dl>"],
       answer: "<ol>"
     },
   
