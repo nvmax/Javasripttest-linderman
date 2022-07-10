@@ -6,6 +6,9 @@ let startButton = document.getElementById("start-button");
 startButton.addEventListener("click", setTime);
 var questionDiv = document.getElementById("question-div");
 var choice = document.getElementById("choices");
+let storedArray = JSON.parse(window.localStorage.getItem("highScores"));
+let viewScoresBtn = document.getElementById("view-scores")
+let scoresDiv = document.getElementById("scores-div");
 var quizCount = 0;
 let score = 0;
 
@@ -53,6 +56,36 @@ function setTime() {
       }
     }
   }
+  // capture user score and store in local storage
+  function captureUserScore() {
+    timer.remove();
+    choice.textContent = "";
+    let initialsInput = document.createElement("input");
+    let postScoreBtn = document.createElement("input");
+    results.innerHTML = `Your score is ${score} Enter initials: `;
+    initialsInput.setAttribute("type", "text");
+    postScoreBtn.setAttribute("type", "button");
+    postScoreBtn.setAttribute("value", "Post Score!");
+    postScoreBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      let scoresArray = defineScoresArray(storedArray, emptyArray);
+      let initials = initialsInput.value;
+      let userAndScore = {
+        initials: initials,
+        score: score,
+      };  
+      scoresArray.push(userAndScore);
+      saveScores(scoresArray);
+      goBackBtn();
+      // need to add in a way to clear the scores array
+      // need to add in a way to display all scores
+      viewScoresBtn.remove();
+    });
+    results.append(initialsInput);
+    results.append(postScoreBtn);
+  }
+
+
 
   const defineScoresArray = (arr1, arr2) => {
     if(arr1 !== null) {
